@@ -1,0 +1,1 @@
+var p5characters = ["Morgana", "Rem Amiyama", "Ann Takamaki", "Ryuji Sakamoto", "Yusuke Hanamura", "Makoto Niijima", "Futaba Sakura", "Haru Okumura"]
