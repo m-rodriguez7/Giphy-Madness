@@ -37,6 +37,7 @@ $(".button").on("click", function () { // using a button class instead of all bu
 			// add attr for dataStill
 			// set src to data still
 			// add attr for current state, still or animated
+			// append gif to page
 		};
 	})
 });
