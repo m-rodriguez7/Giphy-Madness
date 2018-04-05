@@ -1,22 +1,27 @@
-var topic = ["fill", "this", "array", "with", "anything"];
-
+var topic = ["coffee", "cats", "dogs", "espresso", "nature"];
 // need to create buttons for everything in this array
 
 for (var i=0; i < topic.length; i++) {
 	var newButton = $("<button>");
 	newButton.attr("data-title", topic[i]);
-	newButton.attr("class", "button");
+	newButton.attr("class", "button btn btn-success");
 	newButton.text(topic[i]);
 	$("#gifButtons").append(newButton);
 };
 
-$('body').on("click", "#addButton", function () {
+$('body').on("click", "#addButton", function (event) {
 	event.preventDefault();
+	if ($("#searchInput").val() === "") {
+		console.log("no empty buttons pls");
+		alert("add some text!");
+		return;
+	} else {
 	var newButton = $("<button>");
 	newButton.attr("data-title", $("#searchInput").val());
-	newButton.attr("class", "button");
+	newButton.attr("class", "button btn btn-success");
 	newButton.text($("#searchInput").val());
 	$("#gifButtons").append(newButton);
+	};
 })
 
 
@@ -29,24 +34,33 @@ $('body').on("click", ".button", function () { // using a button class instead o
 	// the still shot has essentially the same url as the actual gif, with a "_s" at the end of it "yaddayadda_s.gif" would be a still shot
 	var q = $(this).attr("data-title");
 	console.log(q);
+	$("#gifs").empty();
 	var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=a19C7JNrKpMJFEiHkfo7O7E6VOmYfAx4&q="+q+"&lang=en&limit=10"
 	$.ajax({
 		url: queryURL, //insert giphy api url here
 		method: "GET"
 	}).then(function(response){
+		console.log(response);
 		var results = response.data // this is an array to loop through to pull gifs from!
 		for (var i=0; i<results.length; i++) {
+			gifDiv = $("<div>");
+			gifDiv.attr("class", "col-xs-4");
+			p = $("<p>");
+			p.attr("data-rating", results[i].rating);
+			p.text("Rating: " + results[i].rating);
 			newGif = $("<img>");
-			newGif.attr("data-animate", results[i].images.downsized.url);
+			newGif.attr("data-animate", results[i].images.fixed_width.url);
 			// add attr for data-still
-			newGif.attr("data-still", results[i].images.downsized_still.url);
+			newGif.attr("data-still", results[i].images.fixed_width_still.url);
 			// set src to data still
-			newGif.attr("src", results[i].images.downsized_still.url);
+			newGif.attr("src", results[i].images.fixed_width_still.url);
 			// add attr for current state, still or animated
 			newGif.attr("data-state", "still");
-			// append gif to page
+			// append gif to page 
 			newGif.attr("class", "gif");
-			$("#gifs").append(newGif);
+			gifDiv.append(p);
+			gifDiv.append(newGif);
+			$("#gifs").append(gifDiv);
 			console.log("gifs should be appearing");
 		};
 	})
